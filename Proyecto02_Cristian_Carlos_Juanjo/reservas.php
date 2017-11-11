@@ -62,103 +62,29 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
   </header>
   
   <!-- First Photo Grid-->
-  <div class="w3-row-padding">
+<?php
+  $cont=0;
+  $sqlrec = "SELECT * FROM recursos";
+  $recursos = mysqli_query($conexion, $sqlrec);
+  do { echo '<div class="w3-row-padding">';
+  while ($resultrec = mysqli_fetch_array($recursos)){
+?>
     <div class="w3-third w3-container w3-margin-bottom">
       <img src="img/feelsbadman.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       <div class="w3-container w3-white">
         <p><b>Lorem Ipsum</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
         <div class="w3-right"><a href="#" class="w3-button"><i class="fa fa-exclamation-triangle fa-fw"></i></a></div>
-        
-      </div>
-        
+      </div>   
     </div>
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/misdies.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container">
-      <img src="img/mis10.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-  </div>
-   <div class="w3-row-padding">
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/feelsbadman.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/misdies.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container">
-      <img src="img/mis10.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-  </div>
-   <div class="w3-row-padding">
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/feelsbadman.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/misdies.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container">
-      <img src="img/mis10.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-  </div>
   
-  <!-- Second Photo Grid-->
-  <div class="w3-row-padding">
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/nissan.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="/w3images/p2.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container">
-      <img src="/w3images/p3.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-  </div>
+
+<?php
+$cont++;
+  }
+  echo '</div>';
+} while($cont%3!=0);
+?>
 
   <!-- Pagination 
   <div class="w3-center w3-padding-32">
@@ -173,8 +99,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
   </div> -->
   <div id="resultado" class="modalmask">
       <div class="modalbox movedown" id="resultadoContent">
-        <a href="#close" title="Close" class="close">X</a>
-        <h2 id="tituloResultado">TITULO</h2>
+        <a href="#cerrar" title="Close" class="close">X</a>
+        <div class="w3-section w3-bottombar w3-padding-16">
+          <h1 id="tituloResultado"><b>Incidencias</b></h1>
+        </div>
         <div id="contenidoResultado">
           <?php
               $sql = "SELECT * FROM incidencias";
