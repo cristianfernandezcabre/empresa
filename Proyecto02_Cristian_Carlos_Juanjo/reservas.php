@@ -11,6 +11,15 @@
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 </style>
+<?php
+    $conexion = mysqli_connect ('localhost', 'root', '', 'proyecto2');
+    if (!$conexion) {
+        echo "Error: No se pudo conectar a MySQL. " . PHP_EOL;
+        echo "Errno de depuración: " . mysqli_connect_errno () . PHP_EOL;
+        echo "Error de depuración: " . mysqli_connect_error () . PHP_EOL;
+        exit;
+    }
+?>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
 <!-- Sidebar/menu -->
@@ -166,7 +175,26 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
       <div class="modalbox movedown" id="resultadoContent">
         <a href="#close" title="Close" class="close">X</a>
         <h2 id="tituloResultado">TITULO</h2>
-        <div id="contenidoResultado">contenido resultado</div>
+        <div id="contenidoResultado">
+          <?php
+              $sql = "SELECT * FROM incidencias";
+              $incidencia = mysqli_query($conexion, $sql);
+              while($consulta = mysqli_fetch_array($incidencia)){
+                $fechaini = date_create($consulta['inc_fecha_incidencia']);//usamos date_create para poder convertir la fecha del formato de la bbdd al que nosotros queremos
+                $fechafin = date_create($consulta['inc_fecha_solucion']);
+                $usuario = 'SELECT * FROM usuarios WHERE usu_user = "'.$consulta['usu_user'].'"';
+                $usu_incidencia = mysqli_query($conexion, $usuario);
+                echo 'Numero incidencia: '.$consulta['inc_id'].'<br/>
+                Descripcion incidencia: '.$consulta['inc_descripcion'].'<br/>
+                Fecha creacion: '.date_format($fechaini, 'd-m-y').'<br/>
+                Fecha solucion: '.date_format($fechafin, 'd-m-y').'<br/>';//usamos date_format para darle el formato que queremos a la fecha, en este caso dia-mes-año
+                 
+                while($nombre = mysqli_fetch_array($usu_incidencia)){
+                  echo 'Usuario informante: '.$nombre['usu_nombre'].' '.$nombre['usu_apellido'].'<br/>';
+                }
+              }
+          ?>
+        </div>
       </div>
     </div>
   <!-- Footer -->
