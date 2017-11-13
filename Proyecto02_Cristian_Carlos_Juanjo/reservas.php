@@ -19,6 +19,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         echo "Error de depuración: " . mysqli_connect_error () . PHP_EOL;
         exit;
     }
+    if (isset($_REQUEST['recursos'])){
+      $sqlrec = "SELECT * FROM recursos WHERE rec_tipo = '".$_REQUEST['recursos']."'";
+    }
+    else{
+      $sqlrec = "SELECT * FROM recursos";
+    }
+    echo $sqlrec;
+
 ?>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
@@ -53,10 +61,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <h1><b>Intranet: Reservas</b></h1>
     <div class="w3-section w3-bottombar w3-padding-16">
       <span class="w3-margin-right">Filtros:</span> 
-      <button class="w3-button w3-black">Todo</button>
-      <button class="w3-button w3-white"><i class="fa fa-book w3-margin-right"></i>Aulas</button>
-      <button class="w3-button w3-white w3-hide-small"><i class="fa fa-users w3-margin-right"></i>Despachos/Salas</button>
-      <button class="w3-button w3-white w3-hide-small"><i class="fa fa-laptop w3-margin-right"></i>Material de trabajo</button>
+      <a href="reservas.php" class="boton"><button class="w3-button w3-black">Todo</button></a>
+      <a href="?recursos=Aulas" class="boton"><button id="filtro" class="w3-button w3-white" onclick="cambiarcolor()"><i class="fa fa-book w3-margin-right"></i>Aulas</button></a>
+      <a href="?recursos=Despachos/Salas" class="boton"><button id="filtro" class="w3-button w3-white w3-hide-small"><i class="fa fa-users w3-margin-right"></i>Despachos/Salas</button></a>
+      <a href="?recursos=Material de trabajo" class="boton"><button id="filtro" class="w3-button w3-white w3-hide-small"><i class="fa fa-laptop w3-margin-right"></i>Material de trabajo</button></a>
     </div>
     </div>
   </header>
@@ -64,26 +72,26 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
   <!-- First Photo Grid-->
 <?php
   $cont=0;
-  $sqlrec = "SELECT * FROM recursos";
   $recursos = mysqli_query($conexion, $sqlrec);
+  //inicio bucle do while para hacer las filas
   do { echo '<div class="w3-row-padding">';
+  //bucle while para mostrar los resultados de la query
   while ($resultrec = mysqli_fetch_array($recursos)){
-?>
+  echo '
     <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/feelsbadman.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <img src="img/feelsbadman.png" alt="'.$resultrec['rec_nombre'].'" style="width:100%" class="w3-hover-opacity">
       <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p><b>'.$resultrec['rec_nombre'].'</b></p>
+        <p>'.$resultrec['rec_desc'].'</p>
         <div class="w3-right"><a href="#" class="w3-button"><i class="fa fa-exclamation-triangle fa-fw"></i></a></div>
       </div>   
-    </div>
-  
+    </div>';
 
-<?php
 $cont++;
   }
   echo '</div>';
-} while($cont%3!=0);
+} //condicion del bucle do while, mientras el modulo3 de contador sea distinto a 0 y el numero de resultados de la query no sea igual a contador hara el bucle
+while(($cont%3!=0)&&(mysqli_num_rows($recursos)!=$cont)); 
 ?>
 
   <!-- Pagination 
@@ -111,15 +119,20 @@ $cont++;
                 $fechaini = date_create($consulta['inc_fecha_incidencia']);//usamos date_create para poder convertir la fecha del formato de la bbdd al que nosotros queremos
                 $fechafin = date_create($consulta['inc_fecha_solucion']);
                 $usuario = 'SELECT * FROM usuarios WHERE usu_user = "'.$consulta['usu_user'].'"';
+                $recursoreparado = 'SELECT * FROM recursos WHERE rec_id = "'.$consulta['rec_id'].'"';
                 $usu_incidencia = mysqli_query($conexion, $usuario);
+                $recursoreparado = mysqli_query($conexion, $recursoreparado);
                 echo 'Numero incidencia: '.$consulta['inc_id'].'<br/>
                 Descripcion incidencia: '.$consulta['inc_descripcion'].'<br/>
                 Fecha creacion: '.date_format($fechaini, 'd-m-y').'<br/>
-                Fecha solucion: '.date_format($fechafin, 'd-m-y').'<br/>';//usamos date_format para darle el formato que queremos a la fecha, en este caso dia-mes-año
+                Fecha solucion: '.date_format($fechafin, 'd-m-y').'<br/>';
+                while($recurso = mysqli_fetch_array($recursoreparado))
+                echo 'Recurso reparado: '.$recurso['rec_nombre'].'<br/>';//usamos date_format para darle el formato que queremos a la fecha, en este caso dia-mes-año
                  
                 while($nombre = mysqli_fetch_array($usu_incidencia)){
                   echo 'Usuario informante: '.$nombre['usu_nombre'].' '.$nombre['usu_apellido'].'<br/>';
                 }
+
               }
           ?>
         </div>
