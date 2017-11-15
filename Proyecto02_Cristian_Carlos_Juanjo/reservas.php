@@ -8,10 +8,32 @@
 <link rel="stylesheet" href="css/miestilo.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="js/ejercicios.js"></script>
+<script>
+function showUser(str) {
+  if (str=="") {
+    document.getElementById("txtHint").innerHTML="";
+    return;
+  } 
+  if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else { // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("txtHint").innerHTML=this.responseText;
+    }
+  }
+  xmlhttp.open("GET","tiltmaximo2.php?q="+str,true);
+  xmlhttp.send();
+}
+</script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 </style>
 <?php
+session_start();
     $conexion = mysqli_connect ('localhost', 'root', '', 'proyecto2');
     if (!$conexion) {
         echo "Error: No se pudo conectar a MySQL. " . PHP_EOL;
@@ -26,9 +48,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
       $sqlrec = "SELECT * FROM recursos";
     }
     echo $sqlrec;
-
+$_SESSION['usuario']="aplans";
 ?>
-<body class="w3-light-grey w3-content" style="max-width:1600px">
+<body class="w3-light-grey w3-content" style="max-width:1600px" onload="showUser('Todo')">
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
@@ -36,13 +58,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
       <i class="fa fa-remove"></i>
     </a>
-    <img src="img/feelsbadman.png" style="width:45%;" class="w3-round"><br><br>
-    <h4><b>Nombre de usuario</b></h4>
+    <img src="img/independance.gif" style="width:45%;" class="w3-round"><br><br>
+    <h4><b><?php echo $_SESSION['usuario']; ?></b></h4>
     <p class="w3-text-grey">Hola</p>
   </div>
   <div class="w3-bar-block">
     <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Inicio</a>
     <a href="#resultado" onclick="funcion1()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-exclamation-triangle fa-fw w3-margin-right"></i>Incidencias</a>
+    <a href="#reserva" onclick="funcion3()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-book fa-fw w3-margin-right"></i>Reservas Activas</a>
     <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>Cerrar Sesion</a> 
   </div>
 </nav>
@@ -61,39 +84,16 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <h1><b>Intranet: Reservas</b></h1>
     <div class="w3-section w3-bottombar w3-padding-16">
       <span class="w3-margin-right">Filtros:</span> 
-      <a href="reservas.php" class="boton"><button class="w3-button w3-black">Todo</button></a>
-      <a href="?recursos=Aulas" class="boton"><button id="filtro" class="w3-button w3-white" onclick="cambiarcolor()"><i class="fa fa-book w3-margin-right"></i>Aulas</button></a>
-      <a href="?recursos=Despachos/Salas" class="boton"><button id="filtro" class="w3-button w3-white w3-hide-small"><i class="fa fa-users w3-margin-right"></i>Despachos/Salas</button></a>
-      <a href="?recursos=Material de trabajo" class="boton"><button id="filtro" class="w3-button w3-white w3-hide-small"><i class="fa fa-laptop w3-margin-right"></i>Material de trabajo</button></a>
+      <button id="todo" class="w3-button w3-black" onclick="showUser('Todo'), todito()">Todo</button>
+      <button id="aulas" class="w3-button w3-white" onclick="showUser('Aulas'), aulas()"><i class="fa fa-book w3-margin-right"></i>Aulas</button>
+      <button id="despachos" class="w3-button w3-white w3-hide-small" onclick="showUser('Despachos/Salas'), despachos()"><i class="fa fa-users w3-margin-right"></i>Despachos/Salas</button>
+      <button id="material" class="w3-button w3-white w3-hide-small" onclick="showUser('Material de trabajo'), material()"><i class="fa fa-laptop w3-margin-right"></i>Material de trabajo</button>
     </div>
     </div>
   </header>
   
   <!-- First Photo Grid-->
-<?php
-  $cont=0;
-  $recursos = mysqli_query($conexion, $sqlrec);
-  //inicio bucle do while para hacer las filas
-  do { echo '<div class="w3-row-padding">';
-  //bucle while para mostrar los resultados de la query
-  while ($resultrec = mysqli_fetch_array($recursos)){
-  echo '
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="img/feelsbadman.png" alt="'.$resultrec['rec_nombre'].'" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>'.$resultrec['rec_nombre'].'</b></p>
-        <p>'.$resultrec['rec_desc'].'</p>
-        <div class="w3-right"><a href="#" class="w3-button"><i class="fa fa-exclamation-triangle fa-fw"></i></a></div>
-      </div>   
-    </div>';
-
-$cont++;
-  }
-  echo '</div>';
-} //condicion del bucle do while, mientras el modulo3 de contador sea distinto a 0 y el numero de resultados de la query no sea igual a contador hara el bucle
-while(($cont%3!=0)&&(mysqli_num_rows($recursos)!=$cont)); 
-?>
-
+<div id="txtHint"><b>Aqui van los recursos</b></div>
   <!-- Pagination 
   <div class="w3-center w3-padding-32">
     <div class="w3-bar">
@@ -105,6 +105,51 @@ while(($cont%3!=0)&&(mysqli_num_rows($recursos)!=$cont));
       <a href="#" class="w3-bar-item w3-button w3-hover-black">»</a>
     </div>
   </div> -->
+  <div id="reserva" class="modalmask">
+      <div class="modalbox movedown" id="reservaContent">
+        <a href="#cerrar" title="Close" class="close">X</a>
+        <div class="w3-section w3-bottombar w3-padding-16">
+          <h1 id="tituloResultado"><b>Mis reservas activas</b></h1>
+        </div>
+        <div id="reservaResultado">
+          <?php
+          $usuario=$_SESSION['usuario'];
+              $sql = "SELECT `reservas`.*, `recursos`.`rec_estado`, `recursos`.`rec_nombre`
+                      FROM `recursos`
+                      INNER JOIN `reservas` ON `reservas`.`rec_id` = `recursos`.`rec_id` WHERE `reservas`.`res_fin` = '0000-00-00 00:00:00' AND `recursos`.`rec_estado` = 'Reservado' AND `reservas`.`usu_user` = '$usuario'";
+              $reserva = mysqli_query($conexion, $sql);
+              echo "<table class='w3-table-all w3-hoverable'>
+                      <thead>
+                        <tr class='w3-light-grey'>
+                          <th>Numero de reserva</th>
+                          <th>Recurso reservado</th>
+                          <th>Fecha de reserva</th>
+                          <th>Cerrar Reserva</th>
+                        </tr>
+                      </thead>";
+
+              while($res = mysqli_fetch_array($reserva)){
+                $fechaini = date_create($res['res_inicio']);//usamos date_create para poder
+                echo '<tr>
+                <td>'.$res['res_id'].'</td>
+                <td>'.$res['rec_nombre'].'</td>
+                <td>'.date_format($fechaini, 'd-m-y H:i:s').'</td>
+                <td>
+                  <form action="modreservas.proc.php" method="GET" >
+                    <input type="hidden" name="usuarios" value="'.$_SESSION['usuario'].'">
+                    <input type="hidden" name="recursos" value="'.$res['rec_id'].'">
+                    <input type="hidden" name="reservas" value="'.$res['res_id'].'">
+                    <input class="w3-button w3-light-grey w3-margin-bottom" type="submit" name="reserva" value="Liberar">
+                  </form>
+                </td>
+                </tr>';
+              }
+              echo "</table>";
+
+          ?>
+        </div>
+      </div>
+    </div>
   <div id="resultado" class="modalmask">
       <div class="modalbox movedown" id="resultadoContent">
         <a href="#cerrar" title="Close" class="close">X</a>
